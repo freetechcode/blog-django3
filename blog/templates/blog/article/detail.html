@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Lite{% endblock %}
+
+{% block content %}
+  <div class="col-md-8">
+    {% include "content_detail.html" with obj=article %}
+
+    <p class="mt-2">
+      <a class="btn btn-dark" href="{% url 'blog:article_share' article.id %}">
+        Share this article
+      </a>
+      <a class="btn btn-outline-dark" href="{% url 'blog:article_list' %}">
+        Back
+      </a>
+    </p>
+  </div>
+{% endblock %}
