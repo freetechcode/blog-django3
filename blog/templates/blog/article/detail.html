@@ -1,18 +1,57 @@
 {% extends "base.html" %}
+{% load article_tags %}
 
 {% block title %}Blog Lite{% endblock %}
 
 {% block content %}
-  <div class="col-md-8">
-    {% include "content_detail.html" with obj=article %}
+  <ul class="list-unstyled">
+    <li class="media">
+      <div class="media-body">
+        <h2 class="mt-0 mb-1">{{ article.title }}</h2>
+        <p>
+          <i class="text-secondary">Published {{ article.publish }} by {{ article.author }}</i>
+        </p>
+        <p>{{ article.content|markdown|safe }}</p>
+        {% if article.tags %}
+          <p>
+            Tags:
+            {% for tag in article.tags.all %}
+              <a href="{% url 'blog:article_list_by_tag' tag.slug %}">
+                {{ tag.name }}
+              </a>
+              {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
+      </div>
+    </li>
 
-    <p class="mt-2">
-      <a class="btn btn-dark" href="{% url 'blog:article_share' article.id %}">
-        Share this article
-      </a>
-      <a class="btn btn-outline-dark" href="{% url 'blog:article_list' %}">
-        Back
-      </a>
-    </p>
-  </div>
+    {% if similiar_articles %}
+    <li class="media mb-2 mt-2">
+      <div class="media-body">
+        <p class="mt-2 mb-2"><strong>Similiar articles</strong></p>
+        <ul class="list-unstyled">
+          {% for article in similiar_articles %}
+            <li class="mb-2">
+              <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            </li>
+          {% empty %}
+            <li>There are no similiar articles yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+    {% endif %}
+  </ul>
+  <p class="mt-2">
+    <a class="btn btn-dark" href="{% url 'blog:article_share' article.id %}">
+      Share this article
+    </a>
+    <a class="btn btn-dark" href="{% url 'blog:comment_list' article.slug %}">
+      {{ total_comments }} Comment{{ total_comments|pluralize }}
+    </a>
+    <a class="btn btn-outline-dark" href="{% url 'blog:article_list' %}">
+      Back
+    </a>
+  </p>
 {% endblock %}

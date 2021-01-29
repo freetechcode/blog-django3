@@ -1,3 +1,4 @@
+{% load article_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -5,19 +6,60 @@
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 </head>
 <body>
   <div class="container mt-4">
     <div class="row">
       <div class="col-md-12">
-        {% include 'jumbroton.html' %}
+        <div class="mt-4 mb-5">
+          <h4 class="display-3 text-dark">
+            <a href="/" style="text-decoration: none" class="text-dark">Blog Lite</a>
+          </h4>
+          <h5 class="text-secondary">
+            This is my blog. I've written {% total_articles %} posts so far.
+          </h5>
+          <hr>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="container mb-4">
     <div class="row">
-      {% block content %}{% endblock %}
+      <div class="col-md-8">
+        {% block content %}{% endblock %}
+      </div>
+      <div class="col-md-4">
+        <h3>Search anything</h3>
+        <p><a href="{% url 'blog:article_search' %}">Search</a></p>
+        <h3>Latest articles</h3>
+        <p>
+          {% show_latest_articles 3 %}
+        </p>
+        <h3>Most commented articles</h3>
+        {% get_most_commented_articles as most_commented_articles %}
+        <ul>
+          {% for article in most_commented_articles %}
+          <li>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+          </li>
+        {% endfor %}
+        </ul>
+        <h3>Sitemap and Feed</h3>
+        <ul>
+          <li>
+            <a href="{% url 'django.contrib.sitemaps.views.sitemap' %}">
+              Sitemap
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'blog:article_feed' %}">
+              Feed
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
