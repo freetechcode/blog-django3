@@ -8,10 +8,13 @@ contextlib2==0.6.0
 distlib==0.3.0
 distro==1.4.0
 Django==3.1.5
+django-crispy-forms==1.10.0
+django-taggit==1.2.0
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
 lockfile==0.12.2
+Markdown==3.2.1
 msgpack==0.6.2
 packaging==20.3
 pep517==0.8.2
